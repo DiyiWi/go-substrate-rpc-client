@@ -260,7 +260,8 @@ func (e EventRecordsRaw) DecodeEventRecords(m *Metadata, t interface{}) error {
 		phase := Phase{}
 		err := decoder.Decode(&phase)
 		if err != nil {
-			return fmt.Errorf("unable to decode Phase for event #%v: %v", i, err)
+			continue
+			//return fmt.Errorf("unable to decode Phase for event #%v: %v", i, err)
 		}
 
 		// decode EventID
@@ -284,7 +285,8 @@ func (e EventRecordsRaw) DecodeEventRecords(m *Metadata, t interface{}) error {
 		// check whether name for eventID exists in t
 		field := val.FieldByName(fmt.Sprintf("%v_%v", moduleName, eventName))
 		if !field.IsValid() {
-			return fmt.Errorf("unable to find field %v_%v for event #%v with EventID %v", moduleName, eventName, i, id)
+			//return fmt.Errorf("unable to find field %v_%v for event #%v with EventID %v", moduleName, eventName, i, id)
+			continue
 		}
 
 		// create a pointer to with the correct type that will hold the decoded event
@@ -314,8 +316,9 @@ func (e EventRecordsRaw) DecodeEventRecords(m *Metadata, t interface{}) error {
 		for j := 1; j < numFields; j++ {
 			err = decoder.Decode(holder.Elem().FieldByIndex([]int{j}).Addr().Interface())
 			if err != nil {
-				return fmt.Errorf("unable to decode field %v event #%v with EventID %v, field %v_%v: %v", j, i, id, moduleName,
-					eventName, err)
+				continue
+				//return fmt.Errorf("unable to decode field %v event #%v with EventID %v, field %v_%v: %v", j, i, id, moduleName,
+				//	eventName, err)
 			}
 		}
 
